@@ -11,6 +11,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private Button mTrueButton;
     private Button mFalseButton;
+    private Button mPreviousButton;
     private Button mNextButton;
     private TextView mQuestionTextView;
 
@@ -30,6 +31,7 @@ public class QuizActivity extends AppCompatActivity {
 
         wireUpUI();
         updateQuestion();
+        updateButtonState();
     }
 
     private void wireUpUI() {
@@ -56,6 +58,14 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
+        mPreviousButton = (Button) findViewById(R.id.previous_button);
+        mPreviousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToPreviousQuestion();
+            }
+        });
+
         mNextButton = (Button) findViewById(R.id.next_button);
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,11 +73,33 @@ public class QuizActivity extends AppCompatActivity {
                 goToNextQuestion();
             }
         });
+
     }
 
     private void goToNextQuestion() {
-        mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-        updateQuestion();
+        if (mCurrentIndex < mQuestionBank.length) {
+            mCurrentIndex++;
+            updateQuestion();
+            updateButtonState();
+        }
+    }
+
+    private void goToPreviousQuestion() {
+        if (mCurrentIndex > 0) {
+            mCurrentIndex--;
+            updateQuestion();
+            updateButtonState();
+        }
+    }
+
+    private void updateButtonState() {
+        mPreviousButton.setEnabled(true);
+        mNextButton.setEnabled(true);
+        if (mCurrentIndex == 0) {
+            mPreviousButton.setEnabled(false);
+        } else if (mCurrentIndex == mQuestionBank.length - 1) {
+            mNextButton.setEnabled(false);
+        }
     }
 
     private void updateQuestion() {
