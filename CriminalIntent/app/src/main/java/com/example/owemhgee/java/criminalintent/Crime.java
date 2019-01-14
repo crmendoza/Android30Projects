@@ -29,7 +29,7 @@ public class Crime {
         this.mTitle = mTitle;
     }
 
-    public Boolean getSolved() {
+    public Boolean isSolved() {
         return mSolved;
     }
 
